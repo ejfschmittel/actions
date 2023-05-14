@@ -1,0 +1,36 @@
+name: "Npm test and build"
+description: "runs npm tests & builds the project & uploads build as artifact"
+
+inputs:
+  node_version:
+    description: "Node version used"
+    required: true
+    default: 16.18
+  artifact_name:
+    description: "path of the uploaded artifact"
+    required: false
+    default: ${{ github.event.repository.name }}-${{ github.event.after }}
+  artifact_path:
+    description: "path of the uploaded artifact"
+    required: false
+    default: dist
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node_version: ${{inputs.node_version}}
+    - name: Install dependencies
+      run: npm ci
+    - name: build
+      run: npm run build
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{inputs.artifact_name}}
+        path: ${{inputs.artifact_path}}
