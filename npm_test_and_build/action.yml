@@ -26,8 +26,10 @@ runs:
       with:
         node_version: ${{inputs.node_version}}
     - name: Install dependencies
+      shell: bash
       run: npm ci
     - name: build
+      shell: bash
       run: npm run build
     - name: Upload build artifacts
       uses: actions/upload-artifact@master
