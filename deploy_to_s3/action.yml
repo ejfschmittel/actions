@@ -27,4 +27,4 @@ runs:
         path: ${{inputs.artifact_path}}
     - name: Upload to s3
       shell: bash
-      run: ./deploy.sh ${{inputs.bucket_name}}
+      run: deploy.sh ${{inputs.bucket_name}}
