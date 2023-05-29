@@ -1,0 +1,30 @@
+name: "Npm test and build"
+description: "runs npm tests & builds the project & uploads build as artifact"
+
+inputs:
+  bucket_name:
+    description: "name of the bucket the files are deployed to"
+    required: true
+  artifact_name:
+    description: "path of the uploaded artifact"
+    required: false
+    default: ${{ github.event.repository.name }}-${{ github.event.after }}
+  artifact_path:
+    description: "path of the uploaded artifact"
+    required: false
+    default: dist
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{inputs.artifact_name}}
+        path: ${{inputs.artifact_path}}
+    - name: Upload to s3
+      shell: bash
+      run: ./deploy.sh ${{inputs.bucket_name}}
