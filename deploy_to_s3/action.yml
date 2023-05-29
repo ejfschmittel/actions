@@ -18,6 +18,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        repository: "ejfschmittel/actions"
     - name: Download build artifacts
       uses: actions/download-artifact@v3
       with:
@@ -25,4 +29,4 @@ runs:
         path: ${{inputs.artifact_path}}
     - name: Upload to s3
       shell: bash
-      run: ./deploy.sh ${{inputs.bucket_name}}
+      run: ./deploy_to_s3/deploy.sh ${{inputs.bucket_name}}
